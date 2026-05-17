@@ -57,17 +57,17 @@ void drawClouds() {
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(cloud3Pos, 0, 0);
-    drawCircle(1160, 750, 45, color);
-    drawCircle(1220, 770, 60, color);
-    drawCircle(1280, 750, 45, color);
-    glPopMatrix();
-
-    glPushMatrix();
     glTranslatef(cloud4Pos, 0, 0);
     drawCircle(400, 750, 45, color);
     drawCircle(460, 770, 60, color);
     drawCircle(520, 750, 45, color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(cloud3Pos, 0, 0);
+    drawCircle(1160, 750, 45, color);
+    drawCircle(1220, 770, 60, color);
+    drawCircle(1280, 750, 45, color);
     glPopMatrix();
 }
 
@@ -95,21 +95,21 @@ void drawSky() {
     drawClouds();
 }
 
-void drawLand() {
+void drawMountain(float px1, float px2, float py, float pm, float h)
+{
     glColor3f(0.24f, 0.47f, 0.24f);
     glBegin(GL_TRIANGLES);
-    glVertex2f(0,450);
-    glVertex2f(200,550);
-    glVertex2f(400,450);
-
-    glVertex2f(300,450);
-    glVertex2f(500,580);
-    glVertex2f(700,450);
-
-    glVertex2f(1200,450);
-    glVertex2f(1400,560);
-    glVertex2f(1600,450);
+    glVertex2f(px1, py);
+    glVertex2f(pm, h);
+    glVertex2f(px2, py);
     glEnd();
+}
+
+void drawLand() {
+    drawMountain(0, 400, 520, 200, 630);
+    drawMountain(300, 700, 520, 500, 700);
+    drawMountain(1200,1600, 520, 1400, 640);
+    drawMountain(1500,1940, 520, 1700, 750);
 }
 
 void drawRiver() {
@@ -214,8 +214,8 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     drawSky();
-    /*drawLand();
-    drawRiver();
+    drawLand();
+    /*drawRiver();
     drawRoad();
 
     drawHouse(100, 350);
