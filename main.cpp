@@ -6,7 +6,7 @@ struct Color
     float r, g, b;
 };
 
-float cloud1Pos = 0.0f, cloud2Pos = 0.0f, cloudSpeed = 0.5f;
+float cloud1Pos = 0.0f, cloud2Pos = 0.0f, cloud3Pos = 0.0f, cloud4Pos = 0.0f, cloudSpeed = 0.5f;
 float carPos = 0.0f, carSpeed = 1.5f;
 float rocketY = 0.0f;
 float waterFlow = 0.0f;
@@ -39,6 +39,38 @@ void drawRect(float x1, float y1, float x2, float y2, Color color) {
     glEnd();
 }
 
+void drawClouds() {
+    Color color = isNight ? Color{0.39f, 0.39f, 0.47f} : Color{1.00f, 1.00f, 1.00f};
+
+    glPushMatrix();
+    glTranslatef(cloud1Pos, 0, 0);
+    drawCircle(300, 950, 50, color);
+    drawCircle(360, 970, 55, color);
+    drawCircle(420, 950, 50, color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(cloud2Pos, 0, 0);
+    drawCircle(900, 920, 45, color);
+    drawCircle(960, 940, 50, color);
+    drawCircle(1020, 920, 45, color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(cloud3Pos, 0, 0);
+    drawCircle(1160, 750, 45, color);
+    drawCircle(1220, 770, 60, color);
+    drawCircle(1280, 750, 45, color);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(cloud4Pos, 0, 0);
+    drawCircle(400, 750, 45, color);
+    drawCircle(460, 770, 60, color);
+    drawCircle(520, 750, 45, color);
+    glPopMatrix();
+}
+
 void drawSky() {
     Color skyDay = Color {0.53f, 0.81f, 0.92f};
     Color skyNight = Color {0.10f, 0.10f, 0.44f};
@@ -59,23 +91,8 @@ void drawSky() {
         // -------- Sun ---------
         drawCircle(1600, 900, 60, Color{1.00f, 0.86f, 0.39f});
     }
-}
 
-void drawClouds() {
-    Color col = isNight ? Color{0.39f, 0.39f, 0.47f} : Color{1.00f, 1.00f, 1.00f};
-    glPushMatrix();
-    glTranslatef(cloud1Pos, 0, 0);
-    drawCircle(300, 950, 50, col);
-    drawCircle(360, 970, 55, col);
-    drawCircle(420, 950, 50, col);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(cloud2Pos, 0, 0);
-    drawCircle(900, 900, 45, col);
-    drawCircle(960, 920, 50, col);
-    drawCircle(1020, 900, 45, col);
-    glPopMatrix();
+    drawClouds();
 }
 
 void drawLand() {
@@ -197,9 +214,7 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     drawSky();
-    /*drawSun();
-    drawClouds();
-    drawLand();
+    /*drawLand();
     drawRiver();
     drawRoad();
 
