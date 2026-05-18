@@ -440,46 +440,15 @@ void drawBoat(float x, string streamChannel) {
     glPopMatrix();
 }
 
-void drawTree(float x, float y) {
-    glColor3f(0.43f, 0.17f, 0.00f);
-    glRectf(x-10, y, x+10, y+50);
-    glColor3f(0.21f, 0.55f, 0.04f);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(x-25, y+50);
-    glVertex2f(x, y+100);
-    glVertex2f(x+25, y+50);
-    glVertex2f(x-20, y+80);
-    glVertex2f(x, y+130);
-    glVertex2f(x+20, y+80);
-    glEnd();
-}
+void drawTree(float x) {
+    float posy = 520;
+    glColor3f(0.50f, 0.35f, 0.20f);
+    glRectf(x - 12, posy, x + 12, posy + 60);
 
-void drawHouse(float x, float y) {
-    Color wall = isNight ? Color{0.31f, 0.31f, 0.39f} : Color{0.82f, 0.71f, 0.55f};
-    Color roof = isNight ? Color{0.24f, 0.24f, 0.31f} : Color{0.63f, 0.31f, 0.16f};
-    drawRect(x, y, x+80, y+80, wall);
-    glColor3f(roof.r, roof.g, roof.b);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(x-10, y+80); glVertex2f(x+40, y+130); glVertex2f(x+90, y+80);
-    glEnd();
-
-    glColor3f(0.39f, 0.59f, 0.78f);
-    glRectf(x+15, y+55, x+35, y+75);
-    glRectf(x+45, y+55, x+65, y+75);
-
-    glColor3f(0.31f, 0.24f, 0.16f);
-    glRectf(x+32, y, x+48, y+40);
-}
-
-void drawTower() {
-    Color main = isNight ? Color{0.20f, 0.20f, 0.27f} : Color{0.86f, 0.86f, 0.94f};
-    drawRect(700, 400, 800, 900, main);
-    glColor3f(0.39f, 0.59f, 0.78f);
-    glRectf(720, 500, 780, 850);
-    glColor3f(0.59f, 0.39f, 0.20f);
-    glBegin(GL_TRIANGLES);
-    glVertex2f(680, 900); glVertex2f(750, 980); glVertex2f(820, 900);
-    glEnd();
+    Color leafColor = Color{0.35f, 0.75f, 0.15f};
+    drawCircle(x - 22, posy + 80, 30, leafColor);
+    drawCircle(x + 22, posy + 80, 30, leafColor);
+    drawCircle(x, posy + 110, 35, leafColor);
 }
 
 void drawRocket() {
@@ -501,7 +470,16 @@ void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     drawSky();
+
+    //drawRocket();
+
     drawLand();
+
+    drawTree(400);
+    drawTree(650);
+    drawTree(1150);
+    drawTree(1550);
+    drawTree(1800);
 
     // -------- Electric Pillars ----------
     drawElectricPillar(1720);
@@ -528,17 +506,6 @@ void display() {
     drawBoat(500, "channel2");
     drawBoat(200, "channel1");
     drawBoat(1200, "channel1");
-
-    /*drawHouse(100, 350);
-    drawHouse(200, 350);
-    drawHouse(1400, 350);
-    drawHouse(1550, 350);
-    drawTower();
-
-    drawTree(50, 300);
-    drawTree(1800, 300);
-    drawTree(1650, 300);
-    drawRocket();*/
 
     glutSwapBuffers();
 }
