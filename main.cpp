@@ -220,6 +220,7 @@ void drawCar(float x, string type, string lane) {
     Color carBodyColor = type == "regular" ? Color{1.00f, 0.00f, 0.00f} : Color{0.00f, 0.30f, 1.00f};
     Color carWindowColor = type == "regular" ? Color{0.0f, 0.91f, 0.96f} : Color{0.00f, 0.00f, 0.00f};
     float ypos = lane == "lane1" ? 400.0 : 480.0;
+
     glPushMatrix();
     glTranslatef(x, ypos, 0);
 
@@ -274,6 +275,58 @@ void drawCar(float x, string type, string lane) {
         drawRoundedRect(64, 84, 78, 105, 5, 5, 0, 0, Color{1.00f, 0.00f, 0.00f});
     }
 
+
+    glPopMatrix();
+}
+
+void drawSchoolBus(float x, string lane)
+{
+    float ypos = lane == "lane1" ? 400.0 : 480.0;
+
+    glPushMatrix();
+    glTranslatef(x, ypos, 0);
+
+    if (lane == "lane2")
+    {
+        glScalef(-1.0, 1.0, 1.0);
+    }
+
+    // ------ Body -------
+    drawRoundedRect(0, 0, 225, 140, 30, 30, 30, 30, Color{0.98f, 0.68f, 0.05f});
+
+    // ------ Tires ------
+    drawCircle(45, 0, 22, Color{0.05f, 0.05f, 0.05f});
+    drawCircle(185, 0, 22, Color{0.05f, 0.05f, 0.05f});
+
+    // ------- Rims --------
+    glPushMatrix();
+    glTranslatef(45, 0, 0.0);
+    glScalef(0.45, 0.45, 1.0);
+    glTranslatef(-45, 0, 0.0);
+    drawCircle(45, 0, 20, Color{0.84f, 0.80f, 0.82f});
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(185, 0, 0.0);
+    glScalef(0.45, 0.45, 1.0);
+    glTranslatef(-185, 0, 0.0);
+    drawCircle(185, 0, 20, Color{0.84f, 0.80f, 0.82f});
+    glPopMatrix();
+
+    // ------ Headlight -------
+    drawRoundedRect(205, 28, 220, 38, 5, 5, 5, 5, Color{1.00f, 1.0f, 1.0f});
+
+    // ------ Front Glasses ------
+    drawRoundedRect(200, 60, 225, 120, 0, 30, 30, 0, Color{0.0f, 0.0f, 0.0f});
+
+    for (int i = 20; i < 190; i += 45)
+    {
+        drawRect(i, 80, i + 30, 120, Color{0.0f, 0.91f, 0.96f});
+    }
+
+    // ------ Door ------
+    drawRoundedRect(110, 0, 145, 70, 5, 5, 0, 0, Color{0.45f, 0.27f, 0.13f});
+    drawCircle(135, 35, 4, Color{0.98f, 0.68f, 0.05f});
 
     glPopMatrix();
 }
@@ -358,8 +411,10 @@ void display() {
     // -------- Cars --------
     drawCar(1000, "police", "lane2");
     drawCar(200, "regular", "lane2");
+    drawSchoolBus(600, "lane2");
     drawCar(200, "regular", "lane1");
-    drawCar(500, "police", "lane1");
+    drawCar(1100, "police", "lane1");
+    drawSchoolBus(1400, "lane1");
 
     /*drawRiver();
 
