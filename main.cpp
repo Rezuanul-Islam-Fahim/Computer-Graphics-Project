@@ -362,8 +362,8 @@ void drawRiver() {
     glLineWidth(2);
     glBegin(GL_LINES);
 
-    for (int x = 0; x < 5; x++) {
-        float currentRowY = 280.0f - (x * 50.0f);
+    for (int x = 0; x < 3; x++) {
+        float currentRowY = 280.0f - (x * 90.0f);
 
         for (int y = 0; y < 10; y++) {
             float startX = waterFlow1 + (y * 40.0f);
@@ -375,8 +375,8 @@ void drawRiver() {
         }
     }
 
-    for (int x = 0; x < 5; x++) {
-        float currentRowY = 280.0f - (x * 50.0f);
+    for (int x = 0; x < 3; x++) {
+        float currentRowY = 280.0f - (x * 90.0f);
 
         for (int y = 0; y < 10; y++) {
             float startX = waterFlow2 + (y * 40.0f);
