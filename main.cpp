@@ -6,7 +6,6 @@ struct Color
     float r, g, b;
 };
 
-float cloud1Pos = 0.0f, cloud2Pos = 0.0f, cloud3Pos = 0.0f, cloud4Pos = 0.0f, cloudSpeed = 0.5f;
 float carPos = 0.0f, carSpeed = 1.5f;
 float rocketY = 0.0f;
 float waterFlow = 0.0f;
@@ -39,36 +38,13 @@ void drawRect(float x1, float y1, float x2, float y2, Color color) {
     glEnd();
 }
 
-void drawClouds() {
+void drawCloud(float px, float py)
+{
     Color color = isNight ? Color{0.39f, 0.39f, 0.47f} : Color{1.00f, 1.00f, 1.00f};
 
-    glPushMatrix();
-    glTranslatef(cloud1Pos, 0, 0);
-    drawCircle(300, 950, 50, color);
-    drawCircle(360, 970, 55, color);
-    drawCircle(420, 950, 50, color);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(cloud2Pos, 0, 0);
-    drawCircle(900, 920, 45, color);
-    drawCircle(960, 940, 50, color);
-    drawCircle(1020, 920, 45, color);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(cloud4Pos, 0, 0);
-    drawCircle(400, 750, 45, color);
-    drawCircle(460, 770, 60, color);
-    drawCircle(520, 750, 45, color);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(cloud3Pos, 0, 0);
-    drawCircle(1160, 750, 45, color);
-    drawCircle(1220, 770, 60, color);
-    drawCircle(1280, 750, 45, color);
-    glPopMatrix();
+    drawCircle(px, py, 50, color);
+    drawCircle(px + 60, py + 20, 55, color);
+    drawCircle(px + 120, py, 50, color);
 }
 
 void drawSky() {
@@ -77,22 +53,30 @@ void drawSky() {
 
     drawRect(0, 0, 1920, 1080, isNight ? skyNight : skyDay);
 
+    // --------- Sun/Moon ---------
+    glPushMatrix();
     if (isNight)
     {
-        // -------- Moon ---------
-        drawCircle(1600, 900, 50, Color{0.88f, 0.92f, 0.95f});
+        glTranslatef(1600, 900, 0.0);
+        glScalef(0.8, 0.8, 1.0);
+        glTranslatef(-1600, -900, 0.0);
+    }
+    drawCircle(1600, 900, 60, isNight ? Color{0.88f, 0.92f, 0.95f} : Color{1.00f, 0.86f, 0.39f});
+    glPopMatrix();
+
+    if (isNight)
+    {
         drawCircle(1575, 885, 4, Color{0.58f, 0.66f, 0.76f});
         drawCircle(1598, 865, 6, Color{0.58f, 0.66f, 0.76f});
         drawCircle(1595, 925, 4, Color{0.58f, 0.66f, 0.76f});
         drawCircle(1628, 905, 4, Color{0.58f, 0.66f, 0.76f});
     }
-    else
-    {
-        // -------- Sun ---------
-        drawCircle(1600, 900, 60, Color{1.00f, 0.86f, 0.39f});
-    }
 
-    drawClouds();
+    // --------- Clouds ---------
+    drawCloud(300, 950);
+    drawCloud(900, 920);
+    drawCloud(400, 750);
+    drawCloud(1160, 750);
 }
 
 void drawMountain(float px1, float px2, float py, float pm, float h)
