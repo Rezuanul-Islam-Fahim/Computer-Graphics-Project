@@ -391,6 +391,56 @@ void drawRiver() {
     glEnd();
 }
 
+void drawBoat(float x, string streamChannel) {
+    float ypos = (streamChannel == "channel1") ? 100.0f : 240.0f;
+
+    glPushMatrix();
+    glTranslatef(x, ypos, 0);
+
+    if (streamChannel == "channel2") {
+        glScalef(-1.0f, 1.0f, 1.0f);
+    }
+
+    Color hullColor       = Color{0.85f, 0.20f, 0.20f};
+    Color deckColor       = Color{0.95f, 0.95f, 0.95f};
+    Color cabinColor      = Color{0.20f, 0.25f, 0.30f};
+    Color windowColor     = Color{0.64f, 0.91f, 0.96f};
+    Color exhaustColor    = Color{0.30f, 0.30f, 0.30f};
+
+    drawRoundedRect(0, 0, 160, 35, 0.0, 15, 15, 0.0, hullColor);
+
+    glBegin(GL_TRIANGLES);
+        glColor3f(hullColor.r - 0.1f, hullColor.g, hullColor.b);
+        glVertex2f(160, 0);
+        glVertex2f(190, 35);
+        glVertex2f(160, 35);
+    glEnd();
+
+    // -------- Main cabin ---------
+    drawRoundedRect(20, 35, 145, 65, 8.0f, 8.0f, 0.0f, 0.0f, deckColor);
+
+    // ------ Main Cabin windows (3 windows) -------
+    drawCirclePortion(60, 50, 6, 0, 360, windowColor);
+    drawCirclePortion(90, 50, 6, 0, 360, windowColor);
+    drawCirclePortion(120, 50, 6, 0, 360, windowColor);
+
+    // -------- Cockpit ---------
+    drawRoundedRect(45, 65, 115, 85, 12.0f, 4.0f, 0.0f, 0.0f, cabinColor);
+
+    // ---------- Exhaust pipe ---------
+    drawRect(30, 65, 40, 90, exhaustColor);
+    // --------- Exhaust pipe rim ----------
+    glBegin(GL_QUADS);
+        glColor3f(0.1f, 0.1f, 0.1f);
+        glVertex2f(28, 90);
+        glVertex2f(42, 90);
+        glVertex2f(45, 95);
+        glVertex2f(25, 95);
+    glEnd();
+
+    glPopMatrix();
+}
+
 void drawTree(float x, float y) {
     glColor3f(0.43f, 0.17f, 0.00f);
     glRectf(x-10, y, x+10, y+50);
@@ -473,7 +523,14 @@ void display() {
     drawCar(1100, "police", "lane1");
     drawSchoolBus(1400, "lane1");
 
+    // ------- River -------
     drawRiver();
+
+    // ------- Boats ---------
+    drawBoat(1000, "channel2");
+    drawBoat(500, "channel2");
+    drawBoat(200, "channel1");
+    drawBoat(1200, "channel1");
 
     /*drawHouse(100, 350);
     drawHouse(200, 350);
