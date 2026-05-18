@@ -331,6 +331,29 @@ void drawSchoolBus(float x, string lane)
     glPopMatrix();
 }
 
+void drawElectricPillar(float x)
+{
+    drawRoundedRect(x, 520, x + 25, 750, 10, 10, 0, 0, Color{0.55f, 0.55f, 0.55f});
+    glLineWidth(20);
+    glColor3f(0.50f, 0.35f, 0.20f);
+    glBegin(GL_LINES);
+    glVertex2f(x - 10, 770);
+    glVertex2f(x + 40, 710);
+    glEnd();
+}
+
+void drawElectricWires()
+{
+    glLineWidth(2);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glBegin(GL_LINES);
+    glVertex2f(0, 770);
+    glVertex2f(1920, 770);
+    glVertex2f(0, 710);
+    glVertex2f(1920, 710);
+    glEnd();
+}
+
 void drawRiver() {
     Color col = isNight ? waterNight : waterDay;
     drawRect(0, 0, 1920, 300, col);
@@ -338,8 +361,8 @@ void drawRiver() {
     glColor3f(0.78f, 0.86f, 0.94f);
     for (float x = waterFlow; x < 2000; x += 80) {
         glBegin(GL_LINES);
-        glVertex2f(x, 150); glVertex2f(x+40, 170);
-        glVertex2f(x+20, 200); glVertex2f(x+60, 220);
+        glVertex2f(x, 150); glVertex2f(x + 40, 170);
+        glVertex2f(x + 20, 200); glVertex2f(x + 60, 220);
         glEnd();
     }
 }
@@ -406,6 +429,16 @@ void display() {
 
     drawSky();
     drawLand();
+
+    // -------- Electric Pillars ----------
+    drawElectricPillar(1720);
+    drawElectricPillar(1240);
+    drawElectricPillar(760);
+    drawElectricPillar(280);
+
+    // ------- Electric Wires -----------
+    drawElectricWires();
+
     drawRoad();
 
     // -------- Cars --------
