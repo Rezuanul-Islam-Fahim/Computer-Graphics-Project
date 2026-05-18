@@ -10,7 +10,7 @@ struct Color
 };
 
 float rocketY = 0.0f;
-float waterFlow = 0.0f;
+float waterFlow1 = 300.0f, waterFlow2 = 1200.0f;
 bool isNight = false;
 
 Color waterDay = Color {0.27f, 0.51f, 0.71f};
@@ -356,15 +356,39 @@ void drawElectricWires()
 
 void drawRiver() {
     Color col = isNight ? waterNight : waterDay;
-    drawRect(0, 0, 1920, 300, col);
+    drawRect(0, 0, 1920, 370, col);
 
     glColor3f(0.78f, 0.86f, 0.94f);
-    for (float x = waterFlow; x < 2000; x += 80) {
-        glBegin(GL_LINES);
-        glVertex2f(x, 150); glVertex2f(x + 40, 170);
-        glVertex2f(x + 20, 200); glVertex2f(x + 60, 220);
-        glEnd();
+    glLineWidth(2);
+    glBegin(GL_LINES);
+
+    for (int x = 0; x < 5; x++) {
+        float currentRowY = 280.0f - (x * 50.0f);
+
+        for (int y = 0; y < 10; y++) {
+            float startX = waterFlow1 + (y * 40.0f);
+
+            startX = fmod(startX, 1920.0f + 40.0f) - 40.0f;
+
+            glVertex2f(startX, currentRowY + 10);
+            glVertex2f(startX + 20.0f, currentRowY);
+        }
     }
+
+    for (int x = 0; x < 5; x++) {
+        float currentRowY = 280.0f - (x * 50.0f);
+
+        for (int y = 0; y < 10; y++) {
+            float startX = waterFlow2 + (y * 40.0f);
+
+            startX = fmod(startX, 1920.0f + 40.0f) - 40.0f;
+
+            glVertex2f(startX, currentRowY + 10);
+            glVertex2f(startX + 20.0f, currentRowY);
+        }
+    }
+
+    glEnd();
 }
 
 void drawTree(float x, float y) {
@@ -449,9 +473,9 @@ void display() {
     drawCar(1100, "police", "lane1");
     drawSchoolBus(1400, "lane1");
 
-    /*drawRiver();
+    drawRiver();
 
-    drawHouse(100, 350);
+    /*drawHouse(100, 350);
     drawHouse(200, 350);
     drawHouse(1400, 350);
     drawHouse(1550, 350);
