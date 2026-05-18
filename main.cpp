@@ -13,9 +13,6 @@ float rocketY = 0.0f;
 float waterFlow1 = 300.0f, waterFlow2 = 1200.0f;
 bool isNight = false;
 
-Color waterDay = Color {0.27f, 0.51f, 0.71f};
-Color waterNight = Color {0.10f, 0.27f, 0.47f};
-
 void drawCircle(float cx, float cy, float r, Color color) {
     glColor3f(color.r, color.g, color.b);
     glBegin(GL_TRIANGLE_FAN);
@@ -355,6 +352,8 @@ void drawElectricWires()
 }
 
 void drawRiver() {
+    Color waterDay = Color {0.27f, 0.51f, 0.71f};
+    Color waterNight = Color {0.10f, 0.27f, 0.47f};
     Color col = isNight ? waterNight : waterDay;
     drawRect(0, 0, 1920, 370, col);
 
@@ -510,7 +509,6 @@ void display() {
     drawElectricPillar(760);
     drawElectricPillar(280);
 
-    // ------- Electric Wires -----------
     drawElectricWires();
 
     drawRoad();
@@ -523,7 +521,6 @@ void display() {
     drawCar(1100, "police", "lane1");
     drawSchoolBus(1400, "lane1");
 
-    // ------- River -------
     drawRiver();
 
     // ------- Boats ---------
