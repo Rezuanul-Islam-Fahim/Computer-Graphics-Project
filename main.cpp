@@ -9,7 +9,7 @@ struct Color
     float r, g, b;
 };
 
-float rocketY = 0.0f;
+float rocketY = 320.0f;
 float waterFlow1 = 300.0f, waterFlow2 = 1200.0f;
 bool isNight = false;
 
@@ -454,14 +454,41 @@ void drawTree(float x) {
 void drawRocket() {
     glPushMatrix();
     glTranslatef(0, rocketY, 0);
-    glColor3f(0.78f, 0.78f, 0.82f);
+
+    // ------ Body --------
+    glColor3f(0.9f, 0.9f, 0.9f);
     glRectf(50, 200, 100, 400);
+
+    // ------- Top face -------
+    glColor3f(0.55f, 0.00f, 0.00f);
     glBegin(GL_TRIANGLES);
-    glVertex2f(35, 400); glVertex2f(75, 450); glVertex2f(115, 400);
+    glVertex2f(30, 400);
+    glVertex2f(75, 470);
+    glVertex2f(120, 400);
     glEnd();
+
+    // -------- Fire ---------
     glColor3f(1.00f, 0.39f, 0.00f);
     glBegin(GL_TRIANGLES);
-    glVertex2f(55, 200); glVertex2f(75, 160); glVertex2f(95, 200);
+    glVertex2f(55, 200);
+    glVertex2f(75, 160);
+    glVertex2f(95, 200);
+    glEnd();
+
+    // -------- Left wing ---------
+    glColor3f(0.12f, 0.12f, 0.12f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(100, 200);
+    glVertex2f(130, 200);
+    glVertex2f(100, 240);
+    glEnd();
+
+    // -------- Right wing ---------
+    glColor3f(0.12f, 0.12f, 0.12f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(50, 200);
+    glVertex2f(20, 200);
+    glVertex2f(50, 240);
     glEnd();
     glPopMatrix();
 }
@@ -471,7 +498,7 @@ void display() {
 
     drawSky();
 
-    //drawRocket();
+    drawRocket();
 
     drawLand();
 
