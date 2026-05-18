@@ -1,12 +1,14 @@
 #include <GL/glut.h>
 #include <cmath>
+#include <string>
+
+using namespace std;
 
 struct Color
 {
     float r, g, b;
 };
 
-float carPos = 0.0f, carSpeed = 1.5f;
 float rocketY = 0.0f;
 float waterFlow = 0.0f;
 bool isNight = false;
@@ -26,6 +28,36 @@ void drawCircle(float cx, float cy, float r, Color color) {
     glEnd();
 }
 
+void drawCirclePortion(float cx, float cy, float radius, float startAngle, float sweepAngle, Color color) {
+    glColor3f(color.r, color.g, color.b);
+
+    // GL_TRIANGLE_FAN is ideal for pie shapes / partial circles
+    glBegin(GL_TRIANGLE_FAN);
+
+    // 1. Establish the center origin point
+    glVertex2f(cx, cy);
+
+    // Convert angles from degrees to radians for C++ math
+    float startRad = startAngle * M_PI / 180.0f;
+    float sweepRad = sweepAngle * M_PI / 180.0f;
+
+    int segments = 40; // Total smoothness of a full circle
+
+    // Adjust segment count dynamically based on how large the slice actually is
+    int localSegments = (int)(segments * (std::abs(sweepAngle) / 360.0f));
+    if (localSegments < 2) localSegments = 2; // Safety minimum
+
+    // 2. Loop to sweep out the arc edge
+    for (int i = 0; i <= localSegments; i++) {
+        float angle = startRad + (i * sweepRad) / localSegments;
+        float x = cx + cos(angle) * radius;
+        float y = cy + sin(angle) * radius;
+        glVertex2f(x, y);
+    }
+
+    glEnd();
+}
+
 void drawRect(float x1, float y1, float x2, float y2, Color color) {
     glColor3f(color.r, color.g, color.b);
     glBegin(GL_QUADS);
@@ -34,6 +66,65 @@ void drawRect(float x1, float y1, float x2, float y2, Color color) {
     glVertex2f(x2, y1);
     glVertex2f(x2, y2);
     glVertex2f(x1, y2);
+
+    glEnd();
+}
+
+void drawRoundedRect(float x1, float y1, float x2, float y2,
+                             float rTopRight, float rTopLeft, float rBottomLeft, float rBottomRight,
+                             Color color) {
+    // 1. Determine actual min/max coordinates
+    float minX = (x1 < x2) ? x1 : x2;
+    float maxX = (x1 > x2) ? x1 : x2;
+    float minY = (y1 < y2) ? y1 : y2;
+    float maxY = (y1 > y2) ? y1 : y2;
+
+    float width = maxX - minX;
+    float height = maxY - minY;
+
+    // 2. Clamp each radius to ensure they don't exceed half the width or height
+    float maxR = (width < height) ? width / 2.0f : height / 2.0f;
+    if (rTopRight > maxR)    rTopRight = maxR;
+    if (rTopLeft > maxR)     rTopLeft = maxR;
+    if (rBottomLeft > maxR)  rBottomLeft = maxR;
+    if (rBottomRight > maxR) rBottomRight = maxR;
+
+    // 3. Set color
+    glColor3f(color.r, color.g, color.b);
+
+    // 4. Draw the polygon sequentially in a counter-clockwise loop
+    glBegin(GL_POLYGON);
+
+    int segments = 15;
+    float angle;
+
+    // Corner 1: Top-Right (0 to 90 degrees)
+    for (int i = 0; i <= segments; i++) {
+        angle = (i * M_PI / 2.0f) / segments;
+        glVertex2f((maxX - rTopRight) + cos(angle) * rTopRight,
+                   (maxY - rTopRight) + sin(angle) * rTopRight);
+    }
+
+    // Corner 2: Top-Left (90 to 180 degrees)
+    for (int i = 0; i <= segments; i++) {
+        angle = (M_PI / 2.0f) + (i * M_PI / 2.0f) / segments;
+        glVertex2f((minX + rTopLeft) + cos(angle) * rTopLeft,
+                   (maxY - rTopLeft) + sin(angle) * rTopLeft);
+    }
+
+    // Corner 3: Bottom-Left (180 to 270 degrees)
+    for (int i = 0; i <= segments; i++) {
+        angle = M_PI + (i * M_PI / 2.0f) / segments;
+        glVertex2f((minX + rBottomLeft) + cos(angle) * rBottomLeft,
+                   (minY + rBottomLeft) + sin(angle) * rBottomLeft);
+    }
+
+    // Corner 4: Bottom-Right (270 to 360 degrees)
+    for (int i = 0; i <= segments; i++) {
+        angle = (3.0f * M_PI / 2.0f) + (i * M_PI / 2.0f) / segments;
+        glVertex2f((maxX - rBottomRight) + cos(angle) * rBottomRight,
+                   (minY + rBottomRight) + sin(angle) * rBottomRight);
+    }
 
     glEnd();
 }
@@ -125,6 +216,60 @@ void drawRoad() {
     glEnd();
 }
 
+void drawCar(float x, string lane) {
+    float ypos = lane == "lane1" ? 400.0 : 480.0;
+    glPushMatrix();
+    glTranslatef(x, ypos, 0);
+
+    if (lane == "lane2")
+    {
+        glScalef(-1.0, 1.0, 1.0);
+    }
+
+    // ------- Roof -------
+    drawCirclePortion(70, 30, 55, 0, 180, Color{1.00f, 0.00f, 0.00f});
+    drawCirclePortion(75, 35, 40, 0, 90, Color{0.64f, 0.91f, 0.96f});
+    drawCirclePortion(68, 35, 40, 90, 90, Color{0.64f, 0.91f, 0.96f});
+
+    // ------ Body -------
+    drawRoundedRect(0, 0, 155, 45, 50, 20, 6, 6, Color{1.00f, 0.00f, 0.00f});
+
+    // ------ Tires ------
+    drawCircle(35, -3, 20, Color{0.05f, 0.05f, 0.05f});
+    drawCircle(115, -3, 20, Color{0.05f, 0.05f, 0.05f});
+
+    // ------- Rims --------
+    glPushMatrix();
+    glTranslatef(35, -3, 0.0);
+    glScalef(0.4, 0.4, 1.0);
+    glTranslatef(-35, 3, 0.0);
+    drawCircle(35, -3, 20, Color{0.84f, 0.80f, 0.82f});
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(115, -3, 0.0);
+    glScalef(0.4, 0.4, 1.0);
+    glTranslatef(-115, 3, 0.0);
+    drawCircle(115, -3, 20, Color{0.84f, 0.80f, 0.82f});
+    glPopMatrix();
+
+    // ------ Door handles --------
+    glLineWidth(3.5);
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glBegin(GL_LINES);
+    glVertex2f(35, 35);
+    glVertex2f(43, 35);
+    glVertex2f(80, 35);
+    glVertex2f(88, 35);
+    glEnd();
+
+    // ------ Headlight -------
+    drawRoundedRect(138, 18, 150, 26, 5, 5, 5, 5, Color{1.00f, 0.88f, 0.40f});
+
+
+    glPopMatrix();
+}
+
 void drawRiver() {
     Color col = isNight ? waterNight : waterDay;
     drawRect(0, 0, 1920, 300, col);
@@ -180,19 +325,6 @@ void drawTower() {
     glEnd();
 }
 
-void drawCar(float x) {
-    glPushMatrix();
-    glTranslatef(x, 0, 0);
-    glColor3f(1.00f, 0.00f, 0.00f);
-    glRectf(50, 330, 120, 380);
-    glColor3f(0.59f, 0.59f, 0.59f);
-    glRectf(60, 340, 80, 370);
-    glRectf(90, 340, 110, 370);
-    drawCircle(70, 330, 15, {0.16f, 0.16f, 0.16f});
-    drawCircle(100, 330, 15, {0.16f, 0.16f, 0.16f});
-    glPopMatrix();
-}
-
 void drawRocket() {
     glPushMatrix();
     glTranslatef(0, rocketY, 0);
@@ -214,6 +346,11 @@ void display() {
     drawSky();
     drawLand();
     drawRoad();
+
+    // -------- Cars --------
+    drawCar(200, "lane1");
+    drawCar(1000, "lane2");
+
     /*drawRiver();
 
     drawHouse(100, 350);
@@ -225,8 +362,6 @@ void display() {
     drawTree(50, 300);
     drawTree(1800, 300);
     drawTree(1650, 300);
-
-    drawCar(carPos);
     drawRocket();*/
 
     glutSwapBuffers();
