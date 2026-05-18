@@ -216,7 +216,9 @@ void drawRoad() {
     glEnd();
 }
 
-void drawCar(float x, string lane) {
+void drawCar(float x, string type, string lane) {
+    Color carBodyColor = type == "regular" ? Color{1.00f, 0.00f, 0.00f} : Color{0.00f, 0.30f, 1.00f};
+    Color carWindowColor = type == "regular" ? Color{0.0f, 0.91f, 0.96f} : Color{0.00f, 0.00f, 0.00f};
     float ypos = lane == "lane1" ? 400.0 : 480.0;
     glPushMatrix();
     glTranslatef(x, ypos, 0);
@@ -227,12 +229,12 @@ void drawCar(float x, string lane) {
     }
 
     // ------- Roof -------
-    drawCirclePortion(70, 30, 55, 0, 180, Color{1.00f, 0.00f, 0.00f});
-    drawCirclePortion(75, 35, 40, 0, 90, Color{0.64f, 0.91f, 0.96f});
-    drawCirclePortion(68, 35, 40, 90, 90, Color{0.64f, 0.91f, 0.96f});
+    drawCirclePortion(70, 30, 55, 0, 180, carBodyColor);
+    drawCirclePortion(75, 35, 40, 0, 90, carWindowColor);
+    drawCirclePortion(68, 35, 40, 90, 90, carWindowColor);
 
     // ------ Body -------
-    drawRoundedRect(0, 0, 155, 45, 50, 20, 6, 6, Color{1.00f, 0.00f, 0.00f});
+    drawRoundedRect(0, 0, 155, 45, 50, 20, 6, 6, carBodyColor);
 
     // ------ Tires ------
     drawCircle(35, -3, 20, Color{0.05f, 0.05f, 0.05f});
@@ -265,6 +267,12 @@ void drawCar(float x, string lane) {
 
     // ------ Headlight -------
     drawRoundedRect(138, 18, 150, 26, 5, 5, 5, 5, Color{1.00f, 0.88f, 0.40f});
+
+    // ------ Siren ---------
+    if (type == "police")
+    {
+        drawRoundedRect(64, 84, 78, 105, 5, 5, 0, 0, Color{1.00f, 0.00f, 0.00f});
+    }
 
 
     glPopMatrix();
@@ -348,8 +356,10 @@ void display() {
     drawRoad();
 
     // -------- Cars --------
-    drawCar(200, "lane1");
-    drawCar(1000, "lane2");
+    drawCar(1000, "police", "lane2");
+    drawCar(200, "regular", "lane2");
+    drawCar(200, "regular", "lane1");
+    drawCar(500, "police", "lane1");
 
     /*drawRiver();
 
