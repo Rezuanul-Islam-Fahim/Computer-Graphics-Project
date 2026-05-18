@@ -401,16 +401,16 @@ void drawBoat(float x, string streamChannel) {
         glScalef(-1.0f, 1.0f, 1.0f);
     }
 
-    Color hullColor       = Color{0.85f, 0.20f, 0.20f};
+    Color baseColor       = Color{0.85f, 0.20f, 0.20f};
     Color deckColor       = Color{0.95f, 0.95f, 0.95f};
     Color cabinColor      = Color{0.20f, 0.25f, 0.30f};
     Color windowColor     = Color{0.64f, 0.91f, 0.96f};
     Color exhaustColor    = Color{0.30f, 0.30f, 0.30f};
 
-    drawRoundedRect(0, 0, 160, 35, 0.0, 15, 15, 0.0, hullColor);
+    drawRoundedRect(0, 0, 160, 35, 0.0, 15, 15, 0.0, baseColor);
 
     glBegin(GL_TRIANGLES);
-        glColor3f(hullColor.r - 0.1f, hullColor.g, hullColor.b);
+        glColor3f(baseColor.r - 0.1f, baseColor.g, baseColor.b);
         glVertex2f(160, 0);
         glVertex2f(190, 35);
         glVertex2f(160, 35);
@@ -420,9 +420,9 @@ void drawBoat(float x, string streamChannel) {
     drawRoundedRect(20, 35, 145, 65, 8.0f, 8.0f, 0.0f, 0.0f, deckColor);
 
     // ------ Main Cabin windows (3 windows) -------
-    drawCirclePortion(60, 50, 6, 0, 360, windowColor);
-    drawCirclePortion(90, 50, 6, 0, 360, windowColor);
-    drawCirclePortion(120, 50, 6, 0, 360, windowColor);
+    drawCircle(60, 50, 6, windowColor);
+    drawCircle(90, 50, 6, windowColor);
+    drawCircle(120, 50, 6, windowColor);
 
     // -------- Cockpit ---------
     drawRoundedRect(45, 65, 115, 85, 12.0f, 4.0f, 0.0f, 0.0f, cabinColor);
