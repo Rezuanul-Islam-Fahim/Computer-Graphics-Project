@@ -103,6 +103,19 @@ void drawMountain(float px1, float px2, float py, float pm, float h)
     glVertex2f(pm, h);
     glVertex2f(px2, py);
     glEnd();
+
+    // ----- Snow ------
+    glPushMatrix();
+    glTranslatef(pm, h, 0.0);
+    glScalef(0.2, 0.2, 1.0);
+    glTranslatef(-pm, -h, 0.0);
+    glColor3f(1.00f, 1.00f, 1.00f);
+    glBegin(GL_TRIANGLES);
+    glVertex2f(px1, py);
+    glVertex2f(pm, h);
+    glVertex2f(px2, py);
+    glEnd();
+    glPopMatrix();
 }
 
 void drawLand() {
@@ -110,6 +123,22 @@ void drawLand() {
     drawMountain(300, 700, 520, 500, 700);
     drawMountain(1200,1600, 520, 1400, 640);
     drawMountain(1500,1940, 520, 1700, 750);
+}
+
+void drawRoad() {
+    Color roadDay = Color {0.20f, 0.20f, 0.20f};
+    Color roadNight = Color {0.12f, 0.12f, 0.12f};
+    drawRect(0, 370, 1920, 520, isNight ? roadNight : roadDay);
+
+    glColor3f(1.00f, 1.00f, 1.00f);
+    glLineWidth(4);
+    glBegin(GL_LINES);
+    for (int i = 20; i < 1920; i += 90)
+    {
+        glVertex2f(i, 445);
+        glVertex2f(i + 60, 445);
+    }
+    glEnd();
 }
 
 void drawRiver() {
@@ -123,21 +152,6 @@ void drawRiver() {
         glVertex2f(x+20, 200); glVertex2f(x+60, 220);
         glEnd();
     }
-}
-
-void drawRoad() {
-    Color roadDay = Color {0.20f, 0.20f, 0.20f};
-    Color roadNight = Color {0.12f, 0.12f, 0.12f};
-    drawRect(0, 300, 1920, 450, isNight ? roadNight : roadDay);
-
-    glColor3f(1.00f, 1.00f, 1.00f);
-    glLineWidth(4);
-    glBegin(GL_LINES);
-    for (float x = 0; x < 1920; x += 80) {
-        glVertex2f(x, 375);
-        glVertex2f(x+40, 375);
-    }
-    glEnd();
 }
 
 void drawTree(float x, float y) {
@@ -215,8 +229,8 @@ void display() {
 
     drawSky();
     drawLand();
-    /*drawRiver();
     drawRoad();
+    /*drawRiver();
 
     drawHouse(100, 350);
     drawHouse(200, 350);
