@@ -396,8 +396,12 @@ void drawBoat(float x, string streamChannel) {
     glPushMatrix();
     glTranslatef(x, ypos, 0);
 
+    float boatScale = 1.25f;
+
     if (streamChannel == "channel2") {
-        glScalef(-1.0f, 1.0f, 1.0f);
+        glScalef(-1.0f * boatScale, boatScale, 1.0f);
+    } else {
+        glScalef(boatScale, boatScale, 1.0f);
     }
 
     Color baseColor       = Color{0.85f, 0.20f, 0.20f};
@@ -428,7 +432,7 @@ void drawBoat(float x, string streamChannel) {
 
     // ---------- Exhaust pipe ---------
     drawRect(30, 65, 40, 90, exhaustColor);
-    // --------- Exhaust pipe rim ----------
+    // --------- Exhaust rim ----------
     glBegin(GL_QUADS);
         glColor3f(0.1f, 0.1f, 0.1f);
         glVertex2f(28, 90);
