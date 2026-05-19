@@ -1,28 +1,32 @@
-# Prerequisites
-*.d
+# Code::Blocks
+*.depend
+*.layout
 
-# Compiled Object files
+# Build directories
+bin/
+obj/
+build/
+out/
+Debug/
+Release/
+x64/
+x86/
+
+# Compiled object files
+*.d
 *.slo
 *.lo
 *.o
 *.obj
 
-# Precompiled Headers
+# Precompiled headers
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
+# Compiled libraries
 *.so
 *.dylib
 *.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
 *.a
 *.lib
 
@@ -30,15 +34,6 @@
 *.exe
 *.out
 *.app
-
-# Build directories (Common naming conventions)
-bin/
-build/
-out/
-Debug/
-Release/
-x64/
-x86/
 
 # CMake artifacts
 CMakeCache.txt
@@ -66,7 +61,7 @@ _deps/
 *.opendb
 *.VC.db
 
-# JetBrains IDEs (CLion, etc.)
+# JetBrains IDEs
 .idea/
 cmake-build-*/
 
